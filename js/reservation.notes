@@ -1,0 +1,59 @@
+4 inputs
+
+Bowlers
+Lanes
+Start
+Hours
+
+States for each:
+Bowlers: 
+	1-6
+	1-12
+Lanes:
+	1
+	2
+CONTROLLER > Start:
+	An hour with no lanes available
+	An hour with one lane available
+		And the next hour has no lanes available
+		And the next hour has one or more lanes available
+	An hour with two or more lanes available
+		And the next hour has no lanes available
+		And the next hour has one lane available
+		And the next hour has two or more lanes available
+Hours:
+	1
+	2
+
+Abbreviate B, L, S, H
+
+Abbreviate B1, B2, L1, L2, S0, S10, S11, S20, S21, S22, H1, H2
+
+B and L are connected - B is a branch of L
+
+
+Case on S groups:
+
+S0:
+	Disabled, or removed, thus no other options
+S10:
+	B1
+	L1
+	H1
+S11:
+	B1
+	L1
+	H1 && H2
+S20: 
+	B1 && B2
+	L1 && L2
+	H1
+S21:
+	B1 && B2
+	L1 && L2
+	H1 && (IF L1 THEN H2 ELSE FALSE)
+S22:
+	B1 && B2
+	L1 && L2
+	H1 && H2
+	
