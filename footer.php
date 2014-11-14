@@ -4,7 +4,7 @@
 <div id="footer">
 	<div id="footer-content">
 		<div id="footer-copyright">
-			<p>© Copyright 2013 Mission Bowling Club</p>
+			<p>© Copyright 2014 Mission Bowling Club</p>
 		</div>
 		<div id="footer-navbar">
 			<style> <?php echo '#'.$pagename.'-fn a'; ?> { color: #b5121b; } </style>
