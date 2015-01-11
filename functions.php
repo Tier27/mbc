@@ -541,13 +541,16 @@ $db_username = DB_USER;
 $db_password = DB_PASSWORD;
 $db_name     = DB_NAME;
 $conn = mysql_connect($db_host,$db_username,$db_password) or die("Could not connect to Server" .mysql_error());
+mysql_select_db($db_name);
 
-function clean_order() 	{ 
-			$list=mysql_query("select placement from slider order by placement desc") or die(mysql_error()); 
-			while ($row=mysql_fetch_array($list)) { $p=$row['placement']; $j=$p+1; mysql_query("update slider set placement=$j where placement=$p") or die(mysql_error()); }
-			$list=mysql_query("select placement from slider order by placement"); $i=1;
-			while ($row=mysql_fetch_array($list)) { $p=$row['placement']; mysql_query("update slider set placement=$i where placement=$p"); $i++; }
-				} 
+###START THE NOVICE CMS###
+
+function clean_order() { 
+	$list=mysql_query("select placement from slider order by placement desc") or die(mysql_error()); 
+	while ($row=mysql_fetch_array($list)) { $p=$row['placement']; $j=$p+1; mysql_query("update slider set placement=$j where placement=$p") or die(mysql_error()); }
+	$list=mysql_query("select placement from slider order by placement"); $i=1;
+	while ($row=mysql_fetch_array($list)) { $p=$row['placement']; mysql_query("update slider set placement=$i where placement=$p"); $i++; }
+} 
 
 function get_image_name($place)	{ $place = mysql_fetch_array(mysql_query("select id from places where name='$place'")); $id=$place['id'];
 				  $link = mysql_fetch_array(mysql_query("select object from links where place='$id'")); $src_id=$link['object'];
@@ -761,8 +764,10 @@ function print_breaks($int) {
 }
 
 function get_set_id($set_name) {
-	$array=mysql_fetch_array(mysql_query("select set_id from sets where set_name='$set_name'")) or die(mysql_error());
-	return $array['set_id'];
+	global $wpdb;
+	return $wpdb->get_var("SELECT set_id FROM sets WHERE set_name='$set_name'");
+	#$array=mysql_fetch_array(mysql_query("select set_id from sets where set_name='$set_name'")) or die(mysql_error());
+	#return $array['set_id'];
 }
 	
 function get_element_id($set_name) {
@@ -885,9 +890,10 @@ function get_element_name($element_identification) {
 }
 
 function get_set_children_names($set_identification) {
-	$query=mysql_query("select sets.set_id as id, sets.set_name as name from sets join inclusions on sets.set_id=inclusions.set_element_id where inclusions.set_id=$set_identification");
+	global $wpdb;
+	$results = $wpdb->get_results("select sets.set_id as id, sets.set_name as name from sets join inclusions on sets.set_id=inclusions.set_element_id where inclusions.set_id=$set_identification", ARRAY_A);
 	$chilren_names=array();
-	while($child=mysql_fetch_array($query)) {
+	foreach( $results as $child ) {
 		$children_names[$child['id']]=$child['name'];
 	}
 	return $children_names;
@@ -987,8 +993,6 @@ function run_set_function($set_identification) {
 
 function set_include($set_identification) {
 	$contents=get_contents($set_identification);
-	echo hi;
-	echo $contents;
 	include($contents);
 }
 
@@ -998,21 +1002,19 @@ function get_superset_function_id($superset_identification) {
 }
 
 function get_set_function($set_identification) {
-	$element_mapping=mysql_query("select element_id from elements where set_element_id=$set_identification") or die(mysql_error());
-	$rows=mysql_num_rows($element_mapping);
-	if ($rows!=0) {
-		$array=mysql_fetch_array(mysql_query("select element_id from elements where set_element_id=$set_identification")) or die(mysql_error());
-		$element_identification=$array['element_id'];
-		$array=mysql_fetch_array(mysql_query("select function_id from element_function_pairs where element_id=$element_identification")) or die(mysql_error().'here');
-		$function_identification=$array['function_id'];
-		$array=mysql_fetch_array(mysql_query("select function_name from element_functions where function_id=$function_identification")) or die(mysql_error());
-		$function_name=$array['function_name'];
+	global $wpdb;
+	$element_mapping=$wpdb->get_var("select element_id from elements where set_element_id=$set_identification");
+	if ( $element_mapping != FALSE ) {
+		$element_identification = $wpdb->get_var("select element_id from elements where set_element_id=$set_identification");
+		$function_identification = $wpdb->get_var("select function_id from element_function_pairs where element_id=$element_identification");
+		$function_name = $wpdb->get_var("select function_name from element_functions where function_id=$function_identification");
 		return $function_name;
 	}
 }
 
 
 function get_contents($set_identification) {
+	global $wpdb;
 	$element_mapping=mysql_query("select element_id from elements where set_element_id=$set_identification") or die(mysql_error().' with set ID '.$set_identification);
 	$rows=mysql_num_rows($element_mapping);
 	if ($rows!=0) {
@@ -1040,14 +1042,8 @@ function get_children_contents($set_identification) {
 	}
 	return $elements;
 }
-/*
-function bowling_js_script() {
-	wp_register_script( 'bowlingjs', get_template_directory_uri().'/js/bowling.js');
-	wp_enqueue_script('bowlingjs');
-}
 
-add_action('wp_enqueue_scripts', 'bowling_js_script');
-*/
+###END NOVICE CMS
 
 function isSiteAdmin(){
     $currentUser = wp_get_current_user();
@@ -1624,7 +1620,7 @@ function update_slideshow() {
 }
 
 add_action('wp_ajax_update_slideshow', 'update_slideshow' );
-define('RESERVATION_SYSTEM_URL', 'http://reservations.tier27.com');
+define('RESERVATION_SYSTEM_URL', 'http://reservations.missionbowlingclub.com');
 define('IS_SITE_ADMIN', moLibrary::isSiteAdmin());
 if( $_GET['maintenance_mode'] == 'false' )
 	define('MAINTENANCE_MODE', false);
@@ -1632,5 +1628,4 @@ else
 	define('MAINTENANCE_MODE', false);
 
 ini_set('display_errors',0);  
-
 ?>
