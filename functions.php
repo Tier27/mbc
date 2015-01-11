@@ -1464,7 +1464,8 @@ function frontend_get_contents( $setname ) {
 		$i=0;
 		global $wpdb;
 		foreach ($images as $image) { 
-			$image_src= $wpdb->get_var("SELECT guid FROM $wpdb->posts WHERE ID=$image");
+			//$image_src = $wpdb->get_var("SELECT guid FROM $wpdb->posts WHERE ID=$image");
+			$image_src = wp_get_attachment_url($image);
 			if( $i == 0 ) $return = $image_src;
 			$i++;
 			//$src = wp_get_attachment_image_src( $image ); $image_src = $src[0];

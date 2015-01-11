@@ -41,7 +41,6 @@ $gallery_images = get_post_meta( $post->ID, 'gallery_images' );
 <?php
 while ( have_posts() ) :
 	the_post();
-	//simple_block( 101, the_content() );
 endwhile;
 ?>
 		<?php moOutput::content( array( "tag" => "p", "id" => "$pagename-menu-content-first", "content" => "This is default content" ) ); ?>
@@ -52,12 +51,6 @@ endwhile;
 		<br>
 		<?php moOutput::content( array( "tag" => "p", "id" => "$pagename-menu-content-fourth", "content" => "" ) ); ?>
 		<br>
-<!--
-		<p><?php simple_block( 100, 'Mission Bowling Club is proud to serve award-winning, elevated comfort food by Executive Chef Frank. We offer dinner service 7 days a week beginning at 6pm, as well as an extensive Happy Hour menu between 3pm-6pm everyday. Come for the bowling, stay for the food.' ); ?></p><br>
-		<p><?php simple_block( 101, 'Parties of up to 8 can be made' ); ?> <a href="#"><?php simple_block( 103, 'online' ); ?>.</a></p><br>
-		<p><?php simple_block( 102, 'If your group will be larger than 8, please call to speak with a member of our Reservation Staff at' ); ?>  <a href="tel:4158632695"><?php simple_block( 104, '415.863.2695' ); ?></a></p><br>
-		<p><?php simple_block( 105, 'Parties of 14-18 will require a Pre-Fix Dinner Menu' ); ?></p>
--->
 		<p><a id='menu-link' target='_blank'>View the menu</a></p>
 		<script>
 			jQuery( function($) {
@@ -96,30 +89,7 @@ endwhile;
 	</div>
 <!-- End of Page Content -->
 <?php } ?>
-<?php if ($pagename == 'brunch' && false) { ?>
-<!-- Start of Page Content for Brunch and Drinks -->
-	<div class="menu-image">
-		<nav>
-			<ul class="menu">
-				<li><a href="#"><img src="<?php echo get_template_directory_uri(); ?>/img/mbc-1.jpg"></a></li>
-				<li><a href="#"><img src="<?php echo get_template_directory_uri(); ?>/img/mbc-2.jpg"></a></li>
-				<li><a href="#"><img src="<?php echo get_template_directory_uri(); ?>/img/mbc-3.jpg"></a></li>
-			</ul>
-		</nav>
-		<div id="img-main">
-			<img src="<?php echo get_template_directory_uri(); ?>/img/mbc-2-l.jpg">
-		</div>
-	</div>
-	<div class="menu-content">
-		<h2 class="dots"><span class="dots"><?php echo $tagline; ?></span><div class="stripe-line">&nbsp; </div></h2>
-		<p><?php simple_block( 100, 'Mission Bowling Club is proud to serve award-winning, elevated comfort food by Executive Chef Frank. We offer dinner service 7 days a week beginning at 6pm, as well as an extensive Happy Hour menu between 3pm-6pm everyday. Come for the bowling, stay for the food.' ); ?></p><br>
-		<p><?php simple_block( 101, 'Parties of up to 8 can be made' ); ?> <a href="#"><?php simple_block( 103, 'online' ); ?>.</a></p><br>
-		<p><?php simple_block( 102, 'If your group will be larger than 8, please call to speak with a member of our Reservation Staff at' ); ?>  <a href="tel:4158632695"><?php simple_block( 104, '415.863.2695' ); ?></a></p><br>
-		<p><?php simple_block( 105, 'Parties of 14-18 will require a Pre-Fix Dinner Menu' ); ?></p>
-	</div>
-<!-- End of Page Content -->
 
-<?php } ?>
 	<div class="menu-col-alpha">
 	<div id="thumbnails">
 	<ul style="list-style: none;">
